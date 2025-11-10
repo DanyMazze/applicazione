@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .access_box {
+            width: 300px;
+            margin: 100px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="app">
+        <div style="text-align: center;" v-if="!islogged">
+            <h1>Applicazione Notebook</h1>
+            <p>per favore accedi per continuare</p>
+        </div>
+        <div v-if="!islogged" class="access_box">
+            <form>
+                <label for="username">Username:</label>
+                <input type="text" id="username" v-model="username">
+                <br>
+                <label for="email">Email:</label>
+                <input type="email" id="email" v-model="email">
+                <br>
+                <button @click="togglelogin">Login</button>
+            </form>
+        </div>
+
+        <div v-else="islogged">
+            <h1>Benvenuto nella tua area personale</h1>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

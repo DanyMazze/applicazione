@@ -1,0 +1,55 @@
+   <!DOCTYPE html>
+   <html lang="it">
+   <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Vue Notes App</title>
+   <style>
+      body { font-family: sans-serif; padding: 20px; background: #f3f3f3; }
+      .box { background: white; border-radius: 10px; padding: 20px; margin-top: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+      .note { border: 1px solid #ccc; border-radius: 10px; padding: 10px; margin: 10px 0; background-color: #fff; }
+      button { border: none; background-color: #333; color: white; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+      button:hover { background-color: #555; }
+   </style>
+   </head>
+   <body>
+   <div id="app">
+
+      <!-- LOGIN -->
+      <div v-if="!loggedIn" class="box">
+         <h2>Accedi</h2>
+         <input type="text" v-model="utente.nome" placeholder="Inserisci il tuo nome"><br><br>
+         <input type="email" v-model="utente.email" placeholder="Inserisci la tua email"><br><br>
+         <button @click="login">Entra</button>
+      </div>
+
+      <!-- HOME -->
+      <div v-else class="box">
+         <h2>Benvenuto, {{ utente.nome }}!</h2>
+         <p>Email: {{ utente.email }}</p>
+         <button @click="logout">Esci</button>
+
+         <hr>
+         <h3>Crea una nuova nota</h3>
+         <input type="text" v-model="nuovaNota.titolo" placeholder="Titolo della nota"><br><br>
+         <textarea v-model="nuovaNota.descrizione" placeholder="Descrizione..."></textarea><br><br>
+         <button @click="aggiungiNota">Salva nota</button>
+
+         <div v-if="note.length > 0">
+         <h3>Le tue note</h3>
+         <note-card
+            v-for="(nota, index) in note"
+            :key="index"
+            :titolo="nota.titolo"
+            :descrizione="nota.descrizione"
+            @elimina="eliminaNota(index)">
+         </note-card>
+         </div>
+         <p v-else>Nessuna nota ancora.</p>
+      </div>
+   </div>
+
+   <script src="https://unpkg.com/vue@3"></script>
+   <script src="./app.js"></script>
+   </body>
+   </html>
