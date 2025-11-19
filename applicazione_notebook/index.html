@@ -30,12 +30,24 @@
                 <label for="email">Email:</label>
                 <input type="email" id="email" v-model="email">
                 <br>
-                <button @click="togglelogin">Login</button>
+                <button @click.prevent="togglelogin" :disabled="!canLogin">Login</button>
             </form>
         </div>
 
         <div v-else="islogged">
-            <h1>Benvenuto nella tua area personale</h1>
+            <h1>Benvenuto {{ username }}, sei nella tua area personale</h1>
+            <p>Qui puoi gestire i tuoi appunti.</p>
+            <button @click="togglelogin">Logout</button>
+            <hr>
+            <div>
+                <input type="text" v-model="newNoteTitle" placeholder="titolo Nota"> <br>
+                <input type="textarea" v-model="newNoteContent" placeholder="contenuto Nota ">
+                <button @click="addNote">Aggiungi Appunto</button>
+                <h2>I tuoi appunti:</h2>
+                <ul>
+                    <li v-for="(note, index) in notes" :key="index">{{ note }}</li>
+                </ul>
+                
         </div>
     </div>
 
