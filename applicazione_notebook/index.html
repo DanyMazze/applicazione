@@ -5,21 +5,225 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        .access_box {
-            width: 300px;
-            margin: 100px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        :root{
+            --bg-1: #0f172a;
+            --bg-2: #0b1020;
+            --card: #0f1724;
+            --accent: #6ee7b7;
+            --muted: #94a3b8;
+            --glass: rgba(255,255,255,0.04);
+            --radius: 12px;
+            --max-width: 980px;
         }
-        .note {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 10px;
+
+        *{box-sizing:border-box}
+        html,body{
+            height:100%;
+            margin:0;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            color:#e6eef8;
+            background: radial-gradient(1200px 600px at 10% 10%, rgba(110,231,183,0.06), transparent 8%),
+                        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 60%);
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+            padding:32px 18px;
         }
-    </style>
+
+        #app{
+            max-width: var(--max-width);
+            margin: 0 auto;
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 8px 30px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+
+        #app > div[ v-if="!islogged" ] {
+
+        }
+        h1{
+            margin:0 0 8px 0;
+            font-size: clamp(20px, 2.6vw, 28px);
+            letter-spacing: -0.4px;
+            color: #f8fafc;
+        }
+        p.lead{
+            margin:0 0 18px 0;
+            color: var(--muted);
+        }
+
+        .access_box{
+            max-width:420px;
+            margin: 22px auto;
+            padding: 22px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            border-radius: var(--radius);
+            box-shadow: 0 6px 20px rgba(2,6,23,0.5);
+            border: 1px solid rgba(255,255,255,0.03);
+            display:flex;
+            flex-direction:column;
+            gap:10px;
+        }
+
+        .access_box label{
+            font-size:13px;
+            color:var(--muted);
+            margin-top:6px;
+        }
+
+        .access_box input[type="text"],
+        .access_box input[type="email"],
+        input[type="text"],
+        textarea{
+            width:100%;
+            padding:10px 12px;
+            margin-top:6px;
+            border-radius:8px;
+            background:var(--glass);
+            border:1px solid rgba(255,255,255,0.04);
+            color: #e6eef8;
+            outline: none;
+            transition: box-shadow .15s ease, border-color .15s ease;
+            font-size:14px;
+        }
+
+        .access_box input:focus,
+        textarea:focus{
+            box-shadow: 0 6px 18px rgba(110,231,183,0.06);
+            border-color: rgba(110,231,183,0.22);
+        }
+
+        .controls{
+            display:flex;
+            gap:12px;
+            align-items:center;
+            flex-wrap:wrap;
+            margin-bottom:14px;
+        }
+
+        .controls button, button {
+            padding:10px 14px;
+            border-radius:10px;
+            border: none;
+            cursor:pointer;
+            font-weight:600;
+            font-size:14px;
+            transition: transform .09s ease, box-shadow .12s ease;
+            background: linear-gradient(90deg, rgba(110,231,183,0.12), rgba(56,189,248,0.06));
+            color: #e6eef8;
+            box-shadow: 0 6px 18px rgba(2,6,23,0.45);
+        }
+
+        .controls button:hover, button:hover{ transform: translateY(-2px); }
+
+        button[disabled]{
+            opacity:0.45;
+            cursor:not-allowed;
+            transform:none;
+        }
+
+        hr{
+            border: none;
+            height:1px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.03));
+            margin:16px 0;
+        }
+
+        input[placeholder], textarea[placeholder]{
+            color: rgba(230,238,248,0.7);
+        }
+
+        textarea{
+            min-height:90px;
+            max-height:220px;
+            resize:vertical;
+            padding:12px;
+        }
+
+        .notes-grid{
+            display:grid;
+            grid-template-columns: repeat( auto-fill, minmax(240px, 1fr) );
+            gap: 14px;
+            margin-top:12px;
+        }
+
+        .note{
+            background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+            padding:14px;
+            border-radius:12px;
+            border: 1px solid rgba(255,255,255,0.03);
+            box-shadow: 0 6px 20px rgba(2,6,23,0.45);
+            display:flex;
+            flex-direction:column;
+            gap:10px;
+            transition: transform .12s ease, box-shadow .12s ease;
+        }
+
+        .note:hover{
+            transform: translateY(-4px);
+            box-shadow: 0 18px 40px rgba(2,6,23,0.6);
+        }
+
+        .note h2{
+            margin:0;
+            font-size:16px;
+            color:#f8fafc;
+            word-break:break-word;
+        }
+
+        .note p{
+            margin:0;
+            color:var(--muted);
+            font-size:14px;
+            line-height:1.4;
+            white-space:pre-wrap;
+        }
+
+        .note button{
+            align-self:flex-end;
+            padding:8px 10px;
+            border-radius:10px;
+            background:transparent;
+            border:1px solid rgba(255,255,255,0.04);
+            font-weight:700;
+            color:#ff7b88;
+            box-shadow:none;
+        }
+
+        .note button:hover{
+            color:#ff607a;
+            background: rgba(255,96,122,0.04);
+            border-color: rgba(255,96,122,0.12);
+        }
+
+        .muted{
+            color:var(--muted);
+            font-size:13px;
+        }
+
+        .top-bar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:12px;
+            margin-bottom:12px;
+        }
+
+        @media (max-width:640px){
+            #app{ padding:18px; border-radius:10px; }
+            .access_box{ margin:14px 8px; padding:16px; }
+            .controls{ flex-direction:column; align-items:stretch; }
+    }
+    .note-info {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+}
+</style>
 </head>
 <body>
     
@@ -41,7 +245,7 @@
         </div>
 
         <div v-if="islogged">
-            <h1>Benvenuto nella tua area personale</h1>
+            <h1>Benvenuto {{ username }} nella tua area personale</h1>
             <p>Qui potrai gestire le tue note.</p>
             <button @click="islogged = false">Logout</button>
             <hr>
@@ -52,15 +256,18 @@
             <br>
             <button @click="addNote">Aggiungi Nota</button>
             <hr>
-            <h2>Le tue note</h2>
+            <h2>Le tue note: </h2>
+            <p>per ora hai {{ notes.length }} note</p>
             <div v-for="(note, index) in notes" :key="index">
                 <note-card 
                     :titolo="note.title" 
                     :descrizione="note.description"
-                    :note="note"              
-                    :onDelete="deleteNote"     
+                    :autore="note.author"
+                    :data-creazione="note.createdAt"
+                    :data="note"
+                    @delete-note="deleteNote"
                 ></note-card>
-            </div>
+            </div> 
         </div>
     </div>
 
@@ -68,3 +275,4 @@
     <script src="app.js"></script>
 </body>
 </html>
+
