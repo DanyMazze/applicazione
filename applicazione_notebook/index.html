@@ -13,6 +13,12 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+        .note {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -40,15 +46,20 @@
             <button @click="islogged = false">Logout</button>
             <hr>
             <h2>Crea una nuova nota</h2>
-            <input type="text" v-model="newNote.title" placeholder="Titolo della nota">
+            <input type="text" v-model="newNotetitle" placeholder="Titolo della nota">
             <br>
-            <textarea v-model="newNote.description" placeholder="Descrizione della nota"></textarea>
+            <textarea v-model="newNotedescription" placeholder="Descrizione della nota"></textarea>
             <br>
             <button @click="addNote">Aggiungi Nota</button>
             <hr>
             <h2>Le tue note</h2>
             <div v-for="(note, index) in notes" :key="index">
-                <note-card :titolo="note.title" :descrizione="note.description"></note-card>
+                <note-card 
+                    :titolo="note.title" 
+                    :descrizione="note.description"
+                    :note="note"              
+                    :onDelete="deleteNote"     
+                ></note-card>
             </div>
         </div>
     </div>
