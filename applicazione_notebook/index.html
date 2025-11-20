@@ -23,19 +23,33 @@
             <p>per favore accedi per continuare</p>
         </div>
         <div v-if="!islogged" class="access_box">
-            <form>
+            <form @submit.prevent="togglelogin">
                 <label for="username">Username:</label>
                 <input type="text" id="username" v-model="username">
                 <br>
                 <label for="email">Email:</label>
                 <input type="email" id="email" v-model="email">
                 <br>
-                <button @click="togglelogin">Login</button>
+                <button type="submit" :disabled="!isFormValid">Login</button>
             </form>
         </div>
 
-        <div v-else="islogged">
+        <div v-if="islogged">
             <h1>Benvenuto nella tua area personale</h1>
+            <p>Qui potrai gestire le tue note.</p>
+            <button @click="islogged = false">Logout</button>
+            <hr>
+            <h2>Crea una nuova nota</h2>
+            <input type="text" v-model="newNote.title" placeholder="Titolo della nota">
+            <br>
+            <textarea v-model="newNote.description" placeholder="Descrizione della nota"></textarea>
+            <br>
+            <button @click="addNote">Aggiungi Nota</button>
+            <hr>
+            <h2>Le tue note</h2>
+            <div v-for="(note, index) in notes" :key="index">
+                <note-card :titolo="note.title" :descrizione="note.description"></note-card>
+            </div>
         </div>
     </div>
 
